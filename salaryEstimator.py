@@ -79,17 +79,18 @@ std_rmse = rmse_scores.std()
 # print(f"Standard Deviation of RMSE: {std_rmse}")
 #print(X_train.iloc[0])
 plot_data = pd.concat([X_train[['Job Title', 'Gender']], pd.Series(y_train, name='Salary')], axis=1)
-#pickle.dump(forest_reg, open('model.pkl','wb'))
+pickle.dump(forest_reg, open('model.pkl','wb'))
 
 custom_palette = {'Male': '#86a0fc', 'Female': 'pink'}
 
-# sns.barplot(data=plot_data, x='Salary', y='Job Title', hue='Gender',palette= custom_palette)
-# plt.figure(figsize=(14, 8))
-# plt.title("Comparison of Salaries for All Job Titles")
-# plt.show()
+plt.figure(figsize=(25, 8))
+sns.barplot(data=plot_data, x='Salary', y='Job Title', hue='Gender',palette= custom_palette)
+plt.title("Comparison of Salaries for All Job Titles")
+plt.savefig('jobvSalary.png',format='png')
 
 plot_data = pd.concat([X_train[['Education Level', 'Gender']], pd.Series(y_train, name='Salary')], axis=1)
+
+plt.figure(figsize=(25, 8))
 sns.barplot(data=plot_data, x = 'Salary', y = 'Education Level', hue = 'Gender',palette=custom_palette)
-plt.figure(figsize=(14, 8))
 plt.title("Comparison of Salaries for All Education Level")
-plt.show()
+plt.savefig('educationvSalary.png',format='png')
