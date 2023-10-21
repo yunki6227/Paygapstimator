@@ -34,6 +34,13 @@ mask = salary['Job Title'].isin(top_10_job_titles)
 # Filter and drop rows that don't meet the condition
 salary = salary[mask]
 
+category_mapping = {
+    "Bachelor's": "Bachelor's Degree",
+    "Master's": "Master's Degree"
+}
+salary['Education Level'] = salary['Education Level'].replace(category_mapping)
+
+
 X = salary.drop(columns=['Salary'])
 y = salary['Salary']
 

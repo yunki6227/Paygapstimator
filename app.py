@@ -1,5 +1,5 @@
 import locale
-
+import os
 from flask import Flask, render_template, request
 import pickle
 import numpy as np 
@@ -15,7 +15,8 @@ def hello_world():
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+    image_files = [i for i in os.listdir('static/images') if i.endswith('.png')]
+    return render_template("about.html", image_files=image_files)
 
 @app.route("/predict", methods=['POST'])
 def predict():
