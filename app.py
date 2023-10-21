@@ -1,3 +1,5 @@
+import locale
+
 from flask import Flask, render_template, request
 import pickle
 import numpy as np 
@@ -50,15 +52,15 @@ def predict():
         'Years of Experience': [years]
     })
 
-    user_input_prepared_male = full_pipeline.transform(user_input_data_male)  # No need to reshape
-    user_input_prepared_female = full_pipeline.transform(user_input_data_female)
+    #user_input_prepared_male = full_pipeline.transform(user_input_data_male)  # No need to reshape
+    #user_input_prepared_female = full_pipeline.transform(user_input_data_female)
 
 
     # user_input_prepared_male = full_pipeline.transform(user_input_data_male)
     # user_input_prepared_female = full_pipeline.transform(user_input_data_female)
 
-    predicted_salary_male = model.predict(user_input_prepared_male)
-    predicted_salary_female = model.predict(user_input_prepared_female)
+    #predicted_salary_male = locale.format_string("%.2f", model.predict(user_input_prepared_male), grouping=True)
+    #predicted_salary_female = locale.format_string("%.2f", model.predict(user_input_prepared_female), grouping = True)
 
 
 
@@ -67,7 +69,19 @@ def predict():
     # women = 1000
     # men = 1000
     # return render_template('index.html', prediction_text="The expected salaries for women is ${predicted_salary_female}, and for men: ${predicted_salary_male}")
-    return render_template('index.html', prediction_text=f"The expected salaries for women is ${predicted_salary_female[0]:.2f}, and for men: ${predicted_salary_male[0]:.2f}")
+    #return render_template('index.html', prediction_text=f"The expected salaries for women is ${predicted_salary_female[0]:.2f}, and for men: ${predicted_salary_male[0]:.2f}")
+
+    user_input_prepared_male = full_pipeline.transform(user_input_data_male)
+    user_input_prepared_female = full_pipeline.transform(user_input_data_female)
+
+    predicted_salary_male = model.predict(user_input_prepared_male)[0]
+    predicted_salary_female = model.predict(user_input_prepared_female)[0]
+
+    # Format the numbers with commas using the built-in format() function
+    formatted_predicted_salary_male = "${:,.2f}".format(predicted_salary_male)
+    formatted_predicted_salary_female = "${:,.2f}".format(predicted_salary_female)
+
+    return render_template('index.html', prediction_text=f"The expected salaries for women is {formatted_predicted_salary_female}, and for men: {formatted_predicted_salary_male}")
 
 if __name__ == "__main__":
     app.run()
