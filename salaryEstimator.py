@@ -6,7 +6,8 @@ from sklearn.preprocessing import OneHotEncoder
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.compose import ColumnTransformer
-import seaborn as sns
+from sklearn.model_selection import cross_val_score
+import pickle
 
 np.random.seed(42)
 
@@ -55,19 +56,26 @@ full_pipeline = ColumnTransformer([
 X_train_prepared = full_pipeline.fit_transform(X_train)
 X_test_prepared = full_pipeline.transform(X_test)
 
-X_all = pd.concat([X_train, X_test])
-X_all['Salary'] = pd.concat([y_train, y_test])
-# corr_matrix = X_all.corr()
-# plt.figure(figsize=(12, 8))
-# sns.heatmap(corr_matrix, annot=True, cmap='coolwarm')
-# plt.title("Correlation Heatmap")
-# plt.show()
+from sklearn.ensemble import RandomForestRegressor
+forest_reg = RandomForestRegressor(n_estimators = 100, random_state=42)
+forest_reg.fit(X_train_prepared,y_train)
 
-for cat_column in cat_attribs:
-    plt.figure(figsize=(8, 6))
-    sns.barplot(x=cat_column, y='Salary', data=X_all, ci=None)
-    plt.title(f'Correlation between {cat_column} and Salary')
-    plt.xlabel(cat_column)
-    plt.ylabel('Salary')
-    plt.show()
+# Perform 5-fold cross-validation
+scores = cross_val_score(forest_reg, X_train_prepared, y_train, scoring="neg_mean_squared_error", cv=5)
 
+# Calculate the root mean squared error (RMSE) for the cross-validation scores
+rmse_scores = np.sqrt(-scores)
+
+# Print the RMSE scores for each fold
+# for fold, rmse in enumerate(rmse_scores, 1):
+#     print(f"Fold {fold}: RMSE = {rmse}")
+
+# Calculate the mean and standard deviation of RMSE scores
+mean_rmse = rmse_scores.mean()
+std_rmse = rmse_scores.std()
+
+# print(f"Mean RMSE: {mean_rmse}")
+# print(f"Standard Deviation of RMSE: {std_rmse}")
+#print(X_train.iloc[0])
+
+pickle.dump(forest_reg, open('model.pkl','wb'))
