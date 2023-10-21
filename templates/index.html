@@ -19,7 +19,7 @@
                     <a class="nav-link" href="#">Home</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link" href="#">About</a>
+                    <a class="nav-link" href="/about">About</a>
                   </li>
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -51,7 +51,7 @@
                 <form action="{{url_for('predict')}}" method="post">
                     <div class="mb-3">
                         <label for="Age" class="form-label">Age:</label>
-                        <input type="text" name="Age" class="form-control" placeholder="Age" required="required">
+                        <input type="number" name="Age" class="form-control" placeholder="Age" required="required" inputmode="numeric" step="1">
                     </div>
                     <div class="mb-3">
                         <label for="Education" class="form-label">Education:</label>
@@ -77,7 +77,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="YearsOfExperience" class="form-label">Years of Experience:</label>
-                        <input type="text" name="YearsOfExperience" class="form-control" placeholder="Years of Experience" required="required">
+                        <input type="number" name="YearsOfExperience" class="form-control" placeholder="Years of Experience" required="required" inputmode="numeric" step="1">
                     </div>
                     <button type="submit" class="btn btn-primary btn-block">Predict Value</button>
                 </form>
