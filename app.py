@@ -77,12 +77,14 @@ def predict():
 
     predicted_salary_male = model.predict(user_input_prepared_male)[0]
     predicted_salary_female = model.predict(user_input_prepared_female)[0]
+    salary_difference = predicted_salary_male - predicted_salary_female
 
     # Format the numbers with commas using the built-in format() function
     formatted_predicted_salary_male = "${:,.2f}".format(predicted_salary_male)
     formatted_predicted_salary_female = "${:,.2f}".format(predicted_salary_female)
+    formatted_salary_difference = "${:,.2f}".format(salary_difference)
 
-    return render_template('index.html', prediction_text=f"The expected salaries for women is {formatted_predicted_salary_female}, and for men: {formatted_predicted_salary_male}")
+    return render_template('index.html', prediction_text=f"The expected salaries for women is {formatted_predicted_salary_female}, and for men: {formatted_predicted_salary_male}. The salary difference is: {formatted_salary_difference}")
 
 if __name__ == "__main__":
     app.run()
